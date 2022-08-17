@@ -1,3 +1,7 @@
+use anyhow::Result;
+use std::fs;
+use strace_log_utils::parser::parse_log_line;
+
 use clap::{Arg, Command};
 
 fn cli() -> Command<'static> {
@@ -13,11 +17,18 @@ fn cli() -> Command<'static> {
         )
 }
 
-fn do_parse(input: &String) {
-    println!("{input}")
+fn do_parse(input: &String) -> Result<()> {
+    let contents = fs::read_to_string(input)?;
+    let (logs, errors): (Vec<_>, Vec<_>) = contents
+        .lines()
+        .map(parse_log_line)
+        .partition(Result::is_ok);
+    dbg!(logs);
+    dbg!(errors);
+    Ok(())
 }
 
-fn main() {
+fn main() -> Result<()> {
     let matches = cli().get_matches();
 
     match matches.subcommand() {
