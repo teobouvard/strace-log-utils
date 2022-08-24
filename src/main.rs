@@ -29,11 +29,11 @@ fn do_parse(input: &String) -> Result<()> {
 }
 
 fn main() -> Result<()> {
-    let matches = cli().get_matches();
+    let args = cli().get_matches();
 
-    match matches.subcommand() {
-        Some(("parse", sub_matches)) => {
-            do_parse(sub_matches.get_one::<String>("input").expect("required"))
+    match args.subcommand() {
+        Some(("parse", cmd_args)) => {
+            do_parse(cmd_args.get_one::<String>("input").expect("required"))
         }
         _ => unreachable!(),
     }
