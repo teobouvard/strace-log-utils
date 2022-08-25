@@ -35,8 +35,8 @@ pub fn syscall_args(s: &str) -> IResult<&str, Vec<Arg>> {
 }
 
 pub fn syscall_result(s: &str) -> IResult<&str, i8> {
-    map_res(recognize(tuple((opt(tag("-")), digit1))), |out| {
-        i8::from_str_radix(out, 10)
+    map_res(recognize(tuple((opt(tag("-")), digit1))), |out: &str| {
+        out.parse()
     })(s)
 }
 
